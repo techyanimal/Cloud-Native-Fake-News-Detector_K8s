@@ -1,0 +1,1 @@
+The project is a fake news detection model made using logistic regression, a supervised learning algorithm well-suited for binary classification tasks. The model classifies news articles as either "real" or "fake" based on the text data provided by the user. It uses TF-IDF vectorization as the primary text anlaysis technique.
