@@ -2,13 +2,20 @@ import joblib
 import re
 from scipy.sparse import hstack
 import numpy as np
-from sklearn.decomposition import TruncatedSVD   
-import model                                                                          
+from sklearn.decomposition import TruncatedSVD 
+from pathlib import Path  
+#import model                                                                          
 
 #loading the model and ohter necessary things
-model = joblib.load('Fake_news_predictor.pkl')
-tfidf_title = joblib.load('tfidf_title.pkl')
-tfidf_text = joblib.load('tfidf_text.pkl')                                                                                                  
+BASE_DIR = Path(__file__).resolve().parent
+
+model = joblib.load(BASE_DIR / 'Fake_news_predictor.pkl')
+tfidf_title = joblib.load(BASE_DIR / 'tfidf_title.pkl')
+tfidf_text = joblib.load(BASE_DIR / 'tfidf_text.pkl')
+
+#model = joblib.load('MLcode/Fake_news_predictor.pkl')
+#tfidf_title = joblib.load('MLcode/tfidf_title.pkl')
+#tfidf_text = joblib.load('MLcode/tfidf_text.pkl')                                                                                                  
 def text_processing (text):
     if (isinstance(text,str)):
         text = text.lower()
@@ -34,8 +41,8 @@ prediction = model.predict(new_data_combined)
 
 # Output the result
 if prediction[0] == 0:
-    print("The news is classified as REAL.")
-else:
     print("The news is classified as FAKE.")
+else:
+    print("The news is classified as REAL.")
 
 

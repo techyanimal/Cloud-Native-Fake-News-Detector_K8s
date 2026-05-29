@@ -1,74 +1,39 @@
-# from flask import Flask, request, render_template
-# import joblib
-# import re
-# from scipy.sparse import hstack
-
-# # Initialize the Flask application
-# app = Flask(__name__)
-
-# # Load the model and the TF-IDF objects
-# model = joblib.load('Fake_news_predictor.pkl')
-# tfidf_title = joblib.load('tfidf_title.pkl')
-# tfidf_text = joblib.load('tfidf_text.pkl')
-
-# # Define a function for processing text
-# def text_processing(text):
-#     if isinstance(text, str):
-#         text = text.lower()
-#         text = re.sub(r'http\S+|https\S+|www\S+', '', text)  # Remove URLs
-#         text = re.sub(r'<.*?>', '', text)  # Remove HTML tags
-#         text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation marks
-#         text = re.sub(r'\s+', ' ', text).strip()  # Remove extra whitespaces
-#     return text
-
-# # Define the home route to render the form
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
-
-# # Define the prediction route
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     title = request.form['title']
-#     text = request.form['text']
-
-#     # Process the input text
-#     new_title = text_processing(title)
-#     new_text = text_processing(text)
-
-#     # Transform the input using the loaded TF-IDF vectorizers
-#     new_title_tfidf = tfidf_title.transform([new_title])
-#     new_text_tfidf = tfidf_text.transform([new_text])
-
-#     # Combine the title and text vectors
-#     new_data_combined = hstack([new_title_tfidf, new_text_tfidf])
-
-#     # Predict using the loaded model
-#     prediction = model.predict(new_data_combined)
-
-#     # Output the result
-#     if prediction[0] == 0:
-#         result = "The news is classified as REAL."
-#     else:
-#         result = "The news is classified as FAKE."
-
-#     return render_template('index.html', prediction_text=result)
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
-# app.py
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify, render_template
 import joblib
 from scipy.sparse import hstack
 import re
+import os
 
 # Initialize the Flask app
 app = Flask(__name__)
 
+#Setting correct path
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "..",
+    "MLcode",
+    "Fake_news_predictor.pkl"
+)
+
+TEXT_PATH = os.path.join(
+    BASE_DIR,
+    "..",
+    "MLcode",
+    "tfidf_text.pkl"
+)
+
+TITLE_PATH = os.path.join(
+    BASE_DIR,
+    "..",
+    "MLcode",
+    "tfidf_title.pkl"
+)
 # Load the trained model and transformers
-model = joblib.load('Fake_news_predictor.pkl')
-tfidf_title = joblib.load('tfidf_title.pkl')
-tfidf_text = joblib.load('tfidf_text.pkl')
+model = joblib.load(MODEL_PATH)
+tfidf_title = joblib.load(TITLE_PATH)
+tfidf_text = joblib.load(TEXT_PATH)
 
 # Text processing function
 def text_processing(text):
@@ -88,8 +53,9 @@ def index():
 # Route to handle form submission and make predictions
 @app.route('/predict', methods=['POST'])
 def predict():
-    title = request.form['title']
-    text = request.form['text']
+    data = request.get_json()
+    title = data['title']
+    text = data['text']
     new_title = text_processing(title)
     new_text = text_processing(text)
     new_title_tfidf = tfidf_title.transform([new_title])
@@ -99,7 +65,8 @@ def predict():
     
     result = "REAL" if prediction[0] == 0 else "FAKE"
     
-    return render_template('index.html', result=result)
+    return jsonify({
+        "prediction": result })
 
 if __name__ == "__main__":
     app.run(debug=True)

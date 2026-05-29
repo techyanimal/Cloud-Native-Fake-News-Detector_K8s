@@ -1,7 +1,7 @@
 #importing all libraries
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as py
+#import matplotlib.pyplot as py
 import re
 import string
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,8 +13,8 @@ from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 import joblib 
 
 #reading datasets
-True_ = pd.read_csv(r'C:\Users\ANJALI\Downloads\archive\True.csv')
-Fake_ = pd.read_csv(r'C:\Users\ANJALI\Downloads\archive\Fake.csv')  
+True_ = pd.read_csv(r'python-and-ml\Fake News Detector Project\Dataset\true.csv')
+Fake_ = pd.read_csv(r'python-and-ml\Fake News Detector Project\Dataset\fake.csv')  
 
 #data preprocessing 
 
@@ -85,11 +85,11 @@ tfidf_text_matrix = tfidf_text.fit_transform(Data_copy['text'])
 combined_matrix = hstack([tfidf_title_matrix, tfidf_text_matrix])
 
 #reducing dimensionality
-svd = TruncatedSVD(n_components=300)
-reduced_matrix = svd.fit_transform(combined_matrix)                                                                        
+#svd = TruncatedSVD(n_components=300)
+#reduced_matrix = svd.fit_transform(combined_matrix)                                                                        
 combined_df = pd.DataFrame(combined_matrix.toarray())                                                               
-Data_combined = pd.concat([Data_copy.reset_index(drop=True), combined_df], axis=1)
-Data_combined  
+#Data_combined = pd.concat([Data_copy.reset_index(drop=True), combined_df], axis=1)
+#Data_combined  
 
 #data split                                                                                                                                   
 X_train, X_test, y_train, y_test = train_test_split(combined_df, Data_copy['Label'], test_size=0.2, random_state=42)          
