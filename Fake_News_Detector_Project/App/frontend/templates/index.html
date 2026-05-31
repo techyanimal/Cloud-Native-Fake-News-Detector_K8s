@@ -87,7 +87,7 @@ async function predictNews() {
     const title = document.getElementById("title").value;
     const text = document.getElementById("text").value;
 
-    const response = await fetch('/predict', {
+    const response = await fetch("http://backend-service:5000/predict", {
 
         method: 'POST',
 
