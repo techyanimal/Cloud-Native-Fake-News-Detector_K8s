@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: backend
+  labels: 
+    app_part: app_backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels: 
+      app_part: app_backend
+  template:
+    metadata:
+      labels: 
+        app_part: app_backend
+    spec:
+      containers:
+      - name: backend
+        image: anjaliyo/fnd_backend:v2
+        ports: 
+          - containerPort: 5000
+
+      
