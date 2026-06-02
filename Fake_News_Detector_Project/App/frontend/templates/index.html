@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('{{ url_for("static", filename="background.png") }}'); /* Background image for the body */
+            background-image: url('/static/background.png'); /* Background image for the body */
             background-size: cover; /* Ensures the image covers the entire page */
             background-position: center; /* Centers the image */
             background-attachment: fixed; /* Keeps the image fixed when scrolling */
@@ -18,7 +18,7 @@
         }
 
         .header {
-            background-image: url('{{ url_for("static", filename="header-background.png") }}'); /* Specific background for header */
+            background-image: url('/static/header-background.png'); /* Specific background for header */
             background-size: cover; /* Ensures the header background image covers the entire header */
             background-position: center; /* Centers the header image */
             background-repeat: no-repeat; /* Prevents the image from repeating */
@@ -87,7 +87,7 @@ async function predictNews() {
     const title = document.getElementById("title").value;
     const text = document.getElementById("text").value;
 
-    const response = await fetch("http://backend-service:5000/predict", {
+    const response = await fetch("/predict", {
 
         method: 'POST',
 
