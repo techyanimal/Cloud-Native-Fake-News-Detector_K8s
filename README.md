@@ -49,6 +49,7 @@ Fake_News_Detector/
   │   ├── static/
   |       ├── background.png
   |       ├── header-background.png
+  |   ├── nginx.conf
   |   ├── .dockerignore
   │   └── Dockerfile
   │ 
